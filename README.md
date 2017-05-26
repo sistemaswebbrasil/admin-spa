@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Laravel-Vue SPA Starter [WIP]
 
 > A Laravel-Vue SPA starter project template.
@@ -43,3 +44,7 @@ npm run production
 ```
 ##
 wnBnVKlLGtRh4VhDaK54ufpbIQlgfJA0
+=======
+# admin-spa
+Projeto de Teste
+>>>>>>> 922ddeb46640795130a079790aeb78a30ebd1a44
