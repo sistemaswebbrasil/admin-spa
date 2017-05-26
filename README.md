@@ -1,50 +1,47 @@
-<<<<<<< HEAD
-# Laravel-Vue SPA Starter [WIP]
+##Projeto simples com Laravel 5.4 , SPA
 
-> A Laravel-Vue SPA starter project template.
+##Projeto de início de estudos no Laravel 
 
-## Features
+*Erro na ultima importação
+##Permissão projeto dentro do apache
 
-- Laravel 5.4 + Vue + Vue Router + Vuex
-- Pages with custom layouts 
-- Examples for login, register and password reset
-- Integration with [vform](https://github.com/cretueusebiu/vform)
-- Authentication with [JWT](https://github.com/tymondesigns/jwt-auth)
-- Webpack with [laravel-mix](https://github.com/JeffreyWay/laravel-mix)
-- SVG icons with [svg-sprite-loader](https://github.com/kisenka/svg-sprite-loader)
+sudo chmod 777 -R /var/www/html/admin
 
-## Installation
+sudo chgrp -R www-data /var/www/html/admin
 
-- `git clone https://github.com/cretueusebiu/laravel-vue-spa.git`
-- `cd laravel-vue-spa`
-- `cp .env.example .env`
-- `composer install`
-- `php artisan key:generate`
-- `php artisan jwt:secret`
-- Edit `.env` and set your database connection details
-- `php artisan migrate`
-- `npm install` / `yarn`
+##Rodar a aplicação com live reload
 
-## Usage
-
-#### Development
-
-```bash
-# build and watch
 npm run watch
 
-# serve with hot reloading
-npm run hot
-```
+##Correção erro Error: watch app ENOSPC
 
-#### Production
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-```bash
-npm run production
-```
+##Importado o projeto Entrust https://github.com/Zizaco/entrust para autorização
+
+##Limpar o cache deu uma view
+
+php artisan view:clear
+
+
+##Comandos para atualizar o repositório
+
+git add *
+
+git commit -m "Ainda apanhando"
+
+git push origin master
+
+##production.ERROR: RuntimeException: The only supported ciphers are AES-128-CBC and AES-256-CBC with the  correct key lengths.
+
+php artisan key:generate
+
+php artisan config:clear
+
 ##
-wnBnVKlLGtRh4VhDaK54ufpbIQlgfJA0
-=======
-# admin-spa
-Projeto de Teste
->>>>>>> 922ddeb46640795130a079790aeb78a30ebd1a44
+chromium-browser --disable-web-security --user-data-dir
+
+// Don't enforce the same-origin policy. (Used by people testing their sites.)
+const wchar_t kDisableWebSecurity[] = L"disable-web-security";
+
+chromium-browser --disable-web-security
