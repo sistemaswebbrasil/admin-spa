@@ -1,13 +1,13 @@
 ##Projeto simples com Laravel 5.4 , SPA
 
-##Projeto de início de estudos no Laravel 
+##Projeto de início de estudos no Laravel
 
 *Erro na ultima importação
 ##Permissão projeto dentro do apache
 
-sudo chmod 777 -R /var/www/html/admin
+sudo chmod 777 -R /var/www/html/laravel/admin-spa
 
-sudo chgrp -R www-data /var/www/html/admin
+sudo chgrp -R www-data /var/www/html/laravel/admin-spa
 
 ##Rodar a aplicação com live reload
 
@@ -17,12 +17,12 @@ npm run watch
 
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-##Importado o projeto Entrust https://github.com/Zizaco/entrust para autorização
+
 
 ##Limpar o cache deu uma view
 
 php artisan view:clear
-
+  
 
 ##Comandos para atualizar o repositório
 

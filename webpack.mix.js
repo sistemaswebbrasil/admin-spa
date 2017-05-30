@@ -9,3 +9,5 @@ mix.disableNotifications()
 if (mix.config.inProduction) {
   mix.version()
 }
+
+mix.browserSync('http://teste.com');  

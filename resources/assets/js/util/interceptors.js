@@ -14,13 +14,19 @@ axios.interceptors.request.use(
 )
 
 axios.interceptors.response.use(
+
   response => response,
   error => {
     if (error.response.status >= 500) {
+
+
       swal({
+
+
+
         type: 'error',
         title: 'Oops...',
-        html: 'Something went wrong! Please try again.'
+        html: 'Falha na operação:'+error.response.data.error
       })
     } else if (error.response.status === 401 && store.getters.authUser) {
       swal({
