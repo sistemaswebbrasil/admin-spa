@@ -14,13 +14,18 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "@websanova/vue-auth": "^2.16.4-beta",
+    "axios": "^0.16.2",
     "bootstrap-vue": "0.20.1",
     "chart.js": "2.6.0",
+    "font-awesome": "^4.7.0",
+    "simple-line-icons": "^2.4.1",
     "vue": "2.4.2",
+    "vue-axios": "^2.0.2",
+    "vue-i18n": "^6.0.0-alpha.2",
     "vue-chartjs": "2.8.1",
     "vue-router": "2.7.0",
-    "font-awesome": "^4.7.0",
-    "simple-line-icons": "^2.4.1"
+    "vuex": "^2.4.0"
   },
   "devDependencies": {
     "autoprefixer": "7.1.2",

@@ -18,7 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', 'AuthenticateController@authenticate');
-Route::get('/user', 'AuthenticateController@getAuthenticatedUser');
+
 // Route::group(['middleware' => 'jwt.auth'], function () {
-//     Route::get('/user', 'AuthenticateController@getAuthenticatedUser');
+Route::get('/user', 'AuthenticateController@getAuthenticatedUser');
 // });
+
+Route::post('/register', 'RegisterController@create');
+
+// Route::group(
+//       array ( 'middleware' => 'cors' ), function ( $router ) {
+//       $router->options ('', function () {});
