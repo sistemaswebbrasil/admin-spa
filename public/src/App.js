@@ -1,8 +1,19 @@
 // Importando o react dentro deste componente
 import React, { Component } from 'react';
 
-// Importando uma imagem para ser usado na página
-import logo from './logo.svg';
+// Importando o componente link do react router
+// redireciona para o link selecionado sem dar refresh
+import { Link } from "react-router-dom";
+
+// Importando a objeto navbar do react bootstrap
+import { Nav, Navbar } from "react-bootstrap";
+
+// Importando o conponente que irá renderizar o navItem  e
+// irá marcar o link selecionado como ativo
+import RouteNavItem from "./components/RouteNavItem";
+
+// Importando o arquivo de rotas
+import Routes from "./Routes";
 
 // Importando um css
 import './App.css';
@@ -13,14 +24,22 @@ class App extends Component {
   // Define que a tela implementada aqui será renderizada
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Bem vindo ao React</h1>
-        </header>
-        <p className="App-intro">
-          Vamos aprender essa joça ??
-        </p>
+      <div className="App container">
+        <Navbar fluid collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Link to="/">React App</Link>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav pullRight>
+              <RouteNavItem href="/signup">Signup</RouteNavItem>
+              <RouteNavItem href="/login">Login</RouteNavItem>
+            </Nav>
+          </Navbar.Collapse>        
+        </Navbar>
+        <Routes />
       </div>
     );
   }
