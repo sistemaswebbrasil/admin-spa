@@ -1,4 +1,4 @@
-import { authHeader } from '../_helpers';
+let axios = require("axios");
 
 export const userService = {
     login,
@@ -6,30 +6,18 @@ export const userService = {
     getAll
 };
 
-function login(username, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    };
-
-    return fetch('/users/authenticate', requestOptions)
-        .then(response => {
-            if (!response.ok) { 
-                return Promise.reject(response.statusText);
-            }
-
-            return response.json();
-        })
-        .then(user => {
-            // login successful if there's a jwt token in the response
-            if (user && user.token) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
-            }
-
+function login(email, password) {
+    return axios.post('/api/login', {email, password})
+        .then(function (response) {
+            let { token , user} = response.data.data;
+            
+            user.token = token;
+            localStorage.setItem('user', JSON.stringify(user));
             return user;
-        });
+        })
+        .catch(function (error) {
+            return Promise.reject(error.message);
+    });
 }
 
 function logout() {
@@ -37,19 +25,12 @@ function logout() {
     localStorage.removeItem('user');
 }
 
-function getAll() {
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-
-    return fetch('/users', requestOptions).then(handleResponse);
-}
-
-function handleResponse(response) {
-    if (!response.ok) { 
-        return Promise.reject(response.statusText);
-    }
-
-    return response.json();
+function getAll() {    
+    return axios.get('api/users')
+        .then(function (response) {
+            return response.data;
+        })
+        .catch(function (error) {
+            return Promise.reject(error.message);
+    });
 }
