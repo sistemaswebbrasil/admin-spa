@@ -34,6 +34,7 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
+              <RouteNavItem href="/dashboard">Dashboard</RouteNavItem>
               <RouteNavItem href="/signup">Signup</RouteNavItem>
               <RouteNavItem href="/login">Login</RouteNavItem>
             </Nav>

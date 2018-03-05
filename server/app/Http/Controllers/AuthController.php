@@ -75,9 +75,9 @@ class AuthController extends Controller
             // something went wrong whilst attempting to encode the token
             return response()->json(['success' => false, 'error' => 'Failed to login, please try again.'], 500);
         }
-
+        $user = User::select('id','name','email')->where(['email'=>$credentials['email']])->first();
         // all good so return the token
-        return response()->json(['success' => true, 'data' => ['token' => $token]]);
+        return response()->json(['success' => true, 'data' => ['token' => $token,'user'=>$user]]);
     }
 
     /**
