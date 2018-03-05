@@ -19,7 +19,7 @@ class Login extends Component {
         // pelo formulário
         this.state = {
             email: "adriano.faria@gmail.com",
-            password: "raimundos"
+            password: ""
         };
     }
 
