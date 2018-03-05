@@ -43,7 +43,7 @@ class Login extends Component {
     }
 
     goToIndex() {
-        //this.props.history.push("/");
+        this.props.history.push("/dashboard");
     }    
 
     // Renderiza o formulário
