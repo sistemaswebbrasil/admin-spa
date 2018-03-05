@@ -1,6 +1,8 @@
 // Importa o React
 import React, { Component } from "react";
 
+import { Auth } from '../services/index';
+
 // Importa vários componentes do react-bootstrap
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
@@ -8,15 +10,15 @@ import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
 
 // Retorna a página de login
-export default class Login extends Component {
+class Login extends Component {
     //  Construtor recebe as propriedades
-    constructor(props) {
-        super(props);
+    constructor(props , context) {
+        super(props, context);
 
         // Objeto que irá armazenar o usuário que será submetido
         // pelo formulário
         this.state = {
-            email: "",
+            email: "adriano.faria@gmail.com",
             password: ""
         };
     }
@@ -35,8 +37,14 @@ export default class Login extends Component {
 
     // Submete o formulário para o servidor , por enquanto não faz nada
     handleSubmit = event => {
+        Auth.login(this.state)
+            .then(() => this.goToIndex());
         event.preventDefault();
     }
+
+    goToIndex() {
+        //this.props.history.push("/");
+    }    
 
     // Renderiza o formulário
     render() {
@@ -71,6 +79,9 @@ export default class Login extends Component {
                 </form>
             </div>
         );
-    }
+    }   
 }
+
+
+export default Login;
 
