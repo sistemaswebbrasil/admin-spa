@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exports = function(config) {
+module.exports = function (config) {
   // Use your own ESLint file
   let eslintLoader = config.module.rules[0];
   eslintLoader.use[0].options.useEslintrc = true;

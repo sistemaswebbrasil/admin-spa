@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\API\APIBaseController as APIBaseController;
 use Illuminate\Http\Request;
-
 use App\User;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -13,7 +13,7 @@ use Hash;
 use Mail;
 use Illuminate\Support\Facades\Password;
 
-class AuthController extends Controller
+class AuthAPIController extends APIBaseController
 {
     /**
      * API Register
@@ -62,8 +62,8 @@ class AuthController extends Controller
         ];
 
         $validator = Validator::make($credentials, $rules);
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages()]);
+        if ($validator->fails()) {            
+            return $this->sendError( implode("\n",$validator->messages()->all()),[],422);            
         }
 
         try {

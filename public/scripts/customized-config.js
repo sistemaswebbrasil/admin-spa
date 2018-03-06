@@ -14,16 +14,16 @@
 var rewire = require('rewire');
 var proxyquire = require('proxyquire');
 
-switch(process.argv[2]) {
+switch (process.argv[2]) {
   // The "start" script is run during development mode
   case 'start':
     rewireModule('react-scripts/scripts/start.js', loadCustomizer('../config-overrides.dev'));
     break;
-  // The "build" script is run to produce a production bundle
+    // The "build" script is run to produce a production bundle
   case 'build':
     rewireModule('react-scripts/scripts/build.js', loadCustomizer('../config-overrides.prod'));
     break;
-  // The "test" script runs all the tests with Jest
+    // The "test" script runs all the tests with Jest
   case 'test':
     // Load customizations from the config-overrides.testing file.
     // That file should export a single function that takes a config and returns a config
@@ -47,8 +47,8 @@ switch(process.argv[2]) {
 function loadCustomizer(module) {
   try {
     return require(module);
-  } catch(e) {
-    if(e.code !== "MODULE_NOT_FOUND") {
+  } catch (e) {
+    if (e.code !== "MODULE_NOT_FOUND") {
       throw e;
     }
   }

@@ -17,10 +17,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register', 'AuthController@register');
-Route::post('login', 'AuthController@login');
-Route::post('recover', 'AuthController@recover');
+Route::post('register', 'API\AuthAPIController@register');
+Route::post('login', 'API\AuthAPIController@login');
+Route::post('recover', 'API\AuthAPIController@recover');
 Route::group(['middleware' => ['jwt.auth']], function () {
-    Route::get('logout', 'AuthController@logout');
+    Route::get('logout', 'API\AuthAPIController@logout');
     Route::resource('users', 'API\UserAPIController');
 });

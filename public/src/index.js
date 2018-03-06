@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 
 import { store, defaultApi } from './_helpers';
 import { App } from './App';
+
 defaultApi();
 
 render(
