@@ -1,5 +1,4 @@
 var axios = require("axios");
-
 export const userService = {
     login,
     logout,
@@ -14,7 +13,7 @@ function login(email, password) {
         let { token, user } = response.data.data;
         user.token = token;
         localStorage.setItem('user', JSON.stringify(user));
-        //axios.defaults.headers.common['Authorization'] = 'Bearer ' + JSON.stringify(user.token);
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
         return user;
     }).catch(function (error) {            
         return Promise.reject(
