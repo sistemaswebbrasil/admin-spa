@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
@@ -13,25 +13,36 @@ class App extends React.Component {
         super(props);
 
         const { dispatch } = this.props;
-        history.listen((location, action) => {
+        history.listen(() => {
             // clear alert on location change
             dispatch(alertActions.clear());
         });
     }
 
+
     render() {
+
         const { alert } = this.props;
         return (
             <div className="jumbotron">
                 <div className="container">
                     <div className="col-sm-8 col-sm-offset-2">
                         {alert.message &&
-                            <div className={`alert ${alert.type}`}>{alert.message}</div>
+                        <div className={`alert ${alert.type}`}>
+                            {alert.message}
+                        </div>
                         }
                         <Router history={history}>
                             <div>
-                                <PrivateRoute exact path="/" component={HomePage} />
-                                <Route path="/login" component={LoginPage} />
+                                <PrivateRoute
+                                    component={HomePage}
+                                    exact
+                                    path="/"
+                                />
+                                <Route
+                                    component={LoginPage}
+                                    path="/login"
+                                />
                             </div>
                         </Router>
                     </div>
@@ -41,12 +52,18 @@ class App extends React.Component {
     }
 }
 
+App.propTypes = {
+    dispatch: PropTypes.any,
+    alert: PropTypes.object
+};
+
 function mapStateToProps(state) {
     const { alert } = state;
     return {
-        alert
+        alert,
     };
 }
 
 const connectedApp = connect(mapStateToProps)(App);
-export { connectedApp as App }; 
+export { connectedApp as App };
+export default App;

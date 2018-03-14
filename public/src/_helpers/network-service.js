@@ -2,7 +2,7 @@ import axios from 'axios';
 import { history } from '../_helpers';
 
 export default {
-    setupInterceptors: (store) => {
+    setupInterceptors: () => {
         axios.interceptors.response.use(function (response) {
             return response;
         }, function (error) {

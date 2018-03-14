@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import { userActions } from '../_actions';
 
 class LoginPage extends React.Component {
@@ -75,6 +75,11 @@ function mapStateToProps(state) {
         loggingIn
     };
 }
+
+LoginPage.propTypes = {
+    loggingIn: PropTypes.any,
+    dispatch: PropTypes.any,
+};
 
 const connectedLoginPage = connect(mapStateToProps)(LoginPage);
 export { connectedLoginPage as LoginPage };

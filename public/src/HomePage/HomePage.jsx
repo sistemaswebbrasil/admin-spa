@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { userActions } from '../_actions';
 
@@ -10,7 +11,7 @@ class HomePage extends React.Component {
     }
 
     handleDeleteUser(id) {
-        return (e) => this.props.dispatch(userActions.delete(id));
+        return this.props.dispatch(userActions.delete(id));
     }
 
     render() {
@@ -18,13 +19,13 @@ class HomePage extends React.Component {
         return (
             <div className="col-md-6 col-md-offset-3">
                 <h1>Hi {user.name}!</h1>
-                <p>You're logged in with React & JWT!!</p>
+                <p>You re logged in with React & JWT!!</p>
                 <h3>Users from secure api end point:</h3>
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 {users.items &&
                     <ul>
-                        {users.items.data.map((user, index) =>
+                        {users.items.data.map((user) =>
                             <li key={user.id}>
                                 {user.name + ' ' + user.email}
                             </li>
@@ -47,6 +48,12 @@ function mapStateToProps(state) {
         users
     };
 }
+
+HomePage.propTypes = {
+    user: PropTypes.object,
+    users: PropTypes.object,
+    dispatch: PropTypes.any,
+};
 
 const connectedHomePage = connect(mapStateToProps)(HomePage);
 export { connectedHomePage as HomePage };
