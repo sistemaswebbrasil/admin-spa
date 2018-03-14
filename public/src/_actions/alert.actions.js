@@ -1,3 +1,6 @@
+// Contém os criadores de ação do Redux para ações relacionadas a alertas do aplicativo.
+// Por exemplo, para exibir uma mensagem de alerta de sucesso com o texto 'Great Job!' você pode
+// ligar dispatch(alertActions.success('Great Job!'));.
 import { alertConstants } from '../_constants';
 
 export const alertActions = {

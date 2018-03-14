@@ -1,4 +1,4 @@
-
+// Usado para adicionar o token em todas as requisições se o usuário estiver logado
 export function defaultApi() {
     let axios = require('axios');
 

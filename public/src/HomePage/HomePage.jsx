@@ -1,3 +1,6 @@
+// O componente da página inicial é exibido depois de iniciar sessão no aplicativo, ele mostra o nome do usuário
+// registrado e mais uma lista de todos os usuários no aplicativo.Os usuários são carregados no state do
+// redux e enviando a ação redux userActions.getAll()do componentDidMount() equivalente a document.ready
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -39,7 +42,13 @@ class HomePage extends React.Component {
         );
     }
 }
-
+// O plugin eslint-plugin-react pede que sempre seja definido o PropTypes das propriedades recebidas pelos props
+HomePage.propTypes = {
+    user: PropTypes.object,
+    users: PropTypes.object,
+    dispatch: PropTypes.any,
+};
+// Dados vindo da Store
 function mapStateToProps(state) {
     const { users, authentication } = state;
     const { user } = authentication;
@@ -48,12 +57,7 @@ function mapStateToProps(state) {
         users
     };
 }
-
-HomePage.propTypes = {
-    user: PropTypes.object,
-    users: PropTypes.object,
-    dispatch: PropTypes.any,
-};
-
+// Vincula a Store ao componente atual
 const connectedHomePage = connect(mapStateToProps)(HomePage);
+// Retorna a aplicação atual
 export { connectedHomePage as HomePage };

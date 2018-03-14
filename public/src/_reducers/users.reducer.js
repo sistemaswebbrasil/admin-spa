@@ -1,3 +1,5 @@
+// O reduxor de usuários redux gerencia a usersseção do estado da aplicação que é usada pelo HomePage
+// para exibir uma lista de usuários e permitir a exclusão de usuários.
 import { userConstants } from '../_constants';
 
 export function users(state = {}, action) {

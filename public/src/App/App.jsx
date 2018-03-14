@@ -1,3 +1,4 @@
+// Componente da aplicação inicial ,ele contém o html externo, as rotas e a notificação de alerta global
 import React from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -18,10 +19,7 @@ class App extends React.Component {
             dispatch(alertActions.clear());
         });
     }
-
-
     render() {
-
         const { alert } = this.props;
         return (
             <div className="jumbotron">
@@ -51,12 +49,13 @@ class App extends React.Component {
         );
     }
 }
-
+// O plugin eslint-plugin-react pede que sempre seja definido o PropTypes(tipo) das propriedades recebidas pelos props(par)
 App.propTypes = {
     dispatch: PropTypes.any,
     alert: PropTypes.object
 };
 
+// Dados vindo da Store
 function mapStateToProps(state) {
     const { alert } = state;
     return {
@@ -64,6 +63,8 @@ function mapStateToProps(state) {
     };
 }
 
+// Vincula a Store ao componente atual
 const connectedApp = connect(mapStateToProps)(App);
-export { connectedApp as App };
-export default App;
+
+// Retorna a aplicação atual
+export  { connectedApp as App };

@@ -1,3 +1,4 @@
+// Sobrescreve as configurações do webpack do react no modo de produção
 module.exports = function (config) {
     // Use your own ESLint file
     let eslintLoader = config.module.rules[0];

@@ -1,3 +1,4 @@
+// Intercepta todas as requisiões feitas com o axios , possibilitando tratar erros escíficos retornados pela api
 import axios from 'axios';
 import { history } from '../_helpers';
 

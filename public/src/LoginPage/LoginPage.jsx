@@ -1,3 +1,9 @@
+// O componente da página de login torna um formulário de login com os campos de nome de usuário e senha.
+// Ele exibe mensagens de validação para campos inválidos quando o usuário tenta enviar o formulário.
+// Se o formulário for válido, o envio faz com que a userActions.login(username, password)ação redux seja enviada.
+//
+// Na constructor()função, a userActions.logout()ação redux é despachada, que registra o usuário se eles estiverem logados,
+// isso permite que a página de login também seja usada como a página de logout.
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,9 +13,10 @@ class LoginPage extends React.Component {
     constructor(props) {
         super(props);
 
-        // reset login status
+        // Guando entrar na página de login , o usuário atual será deslogado
         this.props.dispatch(userActions.logout());
 
+        // Campos do formulário atual
         this.state = {
             email: '',
             password: '',
@@ -20,11 +27,13 @@ class LoginPage extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    // Chamado guando o estado dos componentes do formulário são alterados
     handleChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     }
 
+    // Chamado guando o formulário é submetido
     handleSubmit(e) {
         e.preventDefault();
 
@@ -32,6 +41,7 @@ class LoginPage extends React.Component {
         const { email, password } = this.state;
         const { dispatch } = this.props;
         if (email && password) {
+            // Manda a requisição de login
             dispatch(userActions.login(email, password));
         }
     }
@@ -68,18 +78,19 @@ class LoginPage extends React.Component {
         );
     }
 }
-
+// O plugin eslint-plugin-react pede que sempre seja definido o PropTypes das propriedades recebidas pelos props
+LoginPage.propTypes = {
+    loggingIn: PropTypes.any,
+    dispatch: PropTypes.any,
+};
+// Dados vindo da Store
 function mapStateToProps(state) {
     const { loggingIn } = state.authentication;
     return {
         loggingIn
     };
 }
-
-LoginPage.propTypes = {
-    loggingIn: PropTypes.any,
-    dispatch: PropTypes.any,
-};
-
+// Vincula a Store ao componente atual
 const connectedLoginPage = connect(mapStateToProps)(LoginPage);
+// Retorna a aplicação atual
 export { connectedLoginPage as LoginPage };

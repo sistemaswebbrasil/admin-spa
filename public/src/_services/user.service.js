@@ -1,3 +1,6 @@
+// O serviço de usuário encapsula todas as chamadas api do backend para executar operações CRUD nos dados do usuário,
+//  bem como o log e o aplicativo de exemplo.Os métodos de serviço são exportados através do userServiceobjeto na parte
+// superior do arquivo e a implementação de cada método está localizada nas declarações de função abaixo.
 var axios = require('axios');
 export const userService = {
     login,
