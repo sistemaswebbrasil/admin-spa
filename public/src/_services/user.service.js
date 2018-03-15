@@ -5,7 +5,11 @@ var axios = require('axios');
 export const userService = {
     login,
     logout,
-    getAll
+    register,
+    getAll,
+    getById,
+    update,
+    delete: _delete
 };
 
 function login(email, password) {
@@ -18,13 +22,7 @@ function login(email, password) {
         localStorage.setItem('user', JSON.stringify(user));
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
         return user;
-    }).catch(function (error) {
-        return Promise.reject(
-            error.response.data.message ?
-                error.response.data.message :
-                error.response.data.error
-        );
-    });
+    }).catch(errorResponse);
 }
 
 function logout() {
@@ -34,10 +32,43 @@ function logout() {
 
 function getAll() {
     return axios.get('api/users')
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            return Promise.reject(error.message);
-        });
+        .then(successResponse)
+        .catch(errorResponse);
+}
+
+function getById(id) {
+    return axios.get('api/users/' + id)
+        .then(successResponse)
+        .catch(errorResponse);
+}
+
+function register(user) {
+    return axios.post('api/register', user)
+        .then(successResponse)
+        .catch(errorResponse);
+}
+
+function update(user) {
+    return axios.put('/api/users/' + user.id, {user})
+        .then(successResponse)
+        .catch(errorResponse);
+}
+
+// prefixed function name with underscore because delete is a reserved word in javascript
+function _delete(id) {
+    return axios.delete('/api/users/' + id)
+        .then(successResponse)
+        .catch(errorResponse);
+}
+
+function successResponse(response) {
+    return response.data.data;
+}
+
+function errorResponse(error) {
+    return Promise.reject(
+        error.response.data.message ?
+            error.response.data.message :
+            error.response.data.error
+    );
 }

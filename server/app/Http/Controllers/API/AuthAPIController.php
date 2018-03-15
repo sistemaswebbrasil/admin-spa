@@ -33,7 +33,7 @@ class AuthAPIController extends APIBaseController
 
         $validator = Validator::make($credentials, $rules);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages()]);
+            return $this->sendError(implode("\n", $validator->messages()->all()), [], 422);
         }
 
         $name = $request->name;
@@ -62,8 +62,8 @@ class AuthAPIController extends APIBaseController
         ];
 
         $validator = Validator::make($credentials, $rules);
-        if ($validator->fails()) {            
-            return $this->sendError( implode("\n",$validator->messages()->all()),[],422);            
+        if ($validator->fails()) {
+            return $this->sendError(implode("\n", $validator->messages()->all()), [], 422);
         }
 
         try {
@@ -75,7 +75,7 @@ class AuthAPIController extends APIBaseController
             // something went wrong whilst attempting to encode the token
             return response()->json(['success' => false, 'error' => 'Failed to login, please try again.'], 500);
         }
-        $user = User::select('id','name','email')->where(['email'=>$credentials['email']])->first();
+        $user = User::select('id', 'name', 'email')->where(['email'=>$credentials['email']])->first();
         // all good so return the token
         return response()->json(['success' => true, 'data' => ['token' => $token,'user'=>$user]]);
     }

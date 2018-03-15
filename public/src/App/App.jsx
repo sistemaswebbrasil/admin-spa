@@ -8,6 +8,10 @@ import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
+import { UserPage } from '../UserPage';
+import { RegisterPage } from '../RegisterPage';
+
+//import UserPage from '../UserPage';
 
 class App extends React.Component {
     constructor(props) {
@@ -30,6 +34,7 @@ class App extends React.Component {
                             {alert.message}
                         </div>
                         }
+                        <h2>Container?</h2>
                         <Router history={history}>
                             <div>
                                 <PrivateRoute
@@ -37,10 +42,16 @@ class App extends React.Component {
                                     exact
                                     path="/"
                                 />
+                                <PrivateRoute
+                                    component={UserPage}
+                                    exact
+                                    path="/users"
+                                />
                                 <Route
                                     component={LoginPage}
                                     path="/login"
                                 />
+                                <Route path="/register" component={RegisterPage} />
                             </div>
                         </Router>
                     </div>

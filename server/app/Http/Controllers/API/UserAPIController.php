@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\APIBaseController as APIBaseController;
 use App\User;
@@ -94,6 +95,6 @@ class UserAPIController extends APIBaseController
             return $this->sendError('User not found.');
         }
         $post->delete();
-        return $this->sendResponse($id, 'Tag deleted successfully.');
+        return $this->sendResponse($id, 'Usuário excluido com sucesso.');
     }
 }

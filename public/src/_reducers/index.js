@@ -4,13 +4,15 @@
 // Se você não está familiarizado com Redux redutores você pode aprender sobre eles em https://redux.js.org/basics/reducers .
 import { combineReducers } from 'redux';
 import { authentication } from './authentication.reducer';
+import { registration } from './registration.reducer';
 import { users } from './users.reducer';
 import { alert } from './alert.reducer';
 
 const rootReducer = combineReducers({
     authentication,
+    registration,
     users,
-    alert,
+    alert
 });
 
 export default rootReducer;
