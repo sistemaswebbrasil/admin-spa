@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\API\APIBaseController as APIBaseController;
 use Illuminate\Http\Request;
-
 use App\User;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -13,7 +13,7 @@ use Hash;
 use Mail;
 use Illuminate\Support\Facades\Password;
 
-class AuthController extends Controller
+class AuthAPIController extends APIBaseController
 {
     /**
      * API Register
@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($credentials, $rules);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages()]);
+            return $this->sendError(implode("\n", $validator->messages()->all()), [], 422);
         }
 
         $name = $request->name;
@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($credentials, $rules);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages()]);
+            return $this->sendError(implode("\n", $validator->messages()->all()), [], 422);
         }
 
         try {
@@ -75,7 +75,7 @@ class AuthController extends Controller
             // something went wrong whilst attempting to encode the token
             return response()->json(['success' => false, 'error' => 'Failed to login, please try again.'], 500);
         }
-        $user = User::select('id','name','email')->where(['email'=>$credentials['email']])->first();
+        $user = User::select('id', 'name', 'email')->where(['email'=>$credentials['email']])->first();
         // all good so return the token
         return response()->json(['success' => true, 'data' => ['token' => $token,'user'=>$user]]);
     }
