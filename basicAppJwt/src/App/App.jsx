@@ -1,6 +1,6 @@
 // Componente da aplicação inicial ,ele contém o html externo, as rotas e a notificação de alerta global
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { history } from '../_helpers';
@@ -38,23 +38,14 @@ class App extends React.Component {
                         <h2>Container?</h2>
                         <Router history={history}>
                             <div>
-                                <PrivateRoute
-                                    component={HomePage}
-                                    exact
-                                    path="/"
-                                />
-                                <PrivateRoute
-                                    component={UserPage}
-                                    exact
-                                    path="/users"
-                                />
-                                <Route
-                                    component={LoginPage}
-                                    path="/login"
-                                />
-                                <Route path="/register" component={RegisterPage} />
-                                { /* Finally, catch all unmatched routes */}
-                                <Route component={NotFound} />
+                                <Switch>
+                                    <PrivateRoute path="/" exact component={HomePage} />
+                                    <Route path="/login" exact component={LoginPage} />
+                                    <PrivateRoute path="/users" exact component={UserPage} />
+                                    <Route path="/register" exact component={RegisterPage} />
+                                    { /* Finally, catch all unmatched routes */}
+                                    <Route component={NotFound} />
+                                </Switch>
                             </div>
                         </Router>
                     </div>
