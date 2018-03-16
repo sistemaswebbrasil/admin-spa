@@ -24,3 +24,4 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('logout', 'API\AuthAPIController@logout');
     Route::resource('users', 'API\UserAPIController');
 });
+Route::resource('contacts', 'API\ContactAPIController');
