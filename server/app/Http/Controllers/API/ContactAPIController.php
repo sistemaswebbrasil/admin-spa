@@ -16,8 +16,8 @@ class ContactAPIController extends APIBaseController
      */
     public function index()
     {
-        $posts = Contact::all();
-        return $this->sendResponse($posts->toArray(), 'Contacts retrieved successfully.');
+        $contacts = Contact::all();
+        return $this->sendResponse($contacts->toArray(), 'Contacts retrieved successfully.');
     }
 
     /**
@@ -30,13 +30,16 @@ class ContactAPIController extends APIBaseController
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'name' => 'required'
+            'name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
         ]);
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
-        $post = Contact::create($input);
-        return $this->sendResponse($post->toArray(), 'Contact created successfully.');
+        $contact = Contact::create($input);
+        return $this->sendResponse($contact->toArray(), 'Contact created successfully.');
     }
 
     /**
@@ -47,12 +50,12 @@ class ContactAPIController extends APIBaseController
      */
     public function show($id)
     {
-        $post = Contact::find($id);
-        if (is_null($post)) {
+        $contact = Contact::find($id);
+        if (is_null($contact)) {
             return $this->sendError('Contato não encontrado');
         }
-        return response()->json($post->toArray(), 200);
-        //return $this->sendResponse($post->toArray(), 'Contact retrieved successfully.');
+        return response()->json($contact->toArray(), 200);
+        //return $this->sendResponse($contact->toArray(), 'Contact retrieved successfully.');
     }
 
     /**
@@ -72,7 +75,7 @@ class ContactAPIController extends APIBaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
         Contact::find($id)->update($input);
-        return $this->sendResponse($post->toArray(), 'Contato Atualizado com sucesso.');
+        return $this->sendResponse($contact->toArray(), 'Contato Atualizado com sucesso.');
     }
 
     /**
@@ -83,11 +86,11 @@ class ContactAPIController extends APIBaseController
      */
     public function destroy($id)
     {
-        $post = Contact::find($id);
-        if (is_null($post)) {
+        $contact = Contact::find($id);
+        if (is_null($contact)) {
             return $this->sendError('Contato não encontrado');
         }
-        $post->delete();
+        $contact->delete();
         return $this->sendResponse($id, 'Contato excluido com sucesso.');
     }
 }

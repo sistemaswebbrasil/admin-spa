@@ -16,8 +16,8 @@ class UserAPIController extends APIBaseController
      */
     public function index()
     {
-        $posts = User::all();
-        return $this->sendResponse($posts->toArray(), 'Users retrieved successfully.');
+        $users = User::all();
+        return $this->sendResponse($users->toArray(), 'Users retrieved successfully.');
     }
 
     /**
@@ -36,8 +36,8 @@ class UserAPIController extends APIBaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        $post = User::create($input);
-        return $this->sendResponse($post->toArray(), 'User created successfully.');
+        $user = User::create($input);
+        return $this->sendResponse($user->toArray(), 'User created successfully.');
     }
 
     /**
@@ -48,11 +48,11 @@ class UserAPIController extends APIBaseController
      */
     public function show($id)
     {
-        $post = User::find($id);
-        if (is_null($post)) {
+        $user = User::find($id);
+        if (is_null($user)) {
             return $this->sendError('User not found.');
         }
-        return $this->sendResponse($post->toArray(), 'User retrieved successfully.');
+        return $this->sendResponse($user->toArray(), 'User retrieved successfully.');
     }
 
     /**
@@ -72,14 +72,14 @@ class UserAPIController extends APIBaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        $post = User::find($id);
-        if (is_null($post)) {
+        $user = User::find($id);
+        if (is_null($user)) {
             return $this->sendError('User not found.');
         }
-        $post->name = $input['name'];
-        $post->description = $input['description'];
-        $post->save();
-        return $this->sendResponse($post->toArray(), 'User updated successfully.');
+        $user->name = $input['name'];
+        $user->description = $input['description'];
+        $user->save();
+        return $this->sendResponse($user->toArray(), 'User updated successfully.');
     }
 
     /**
@@ -90,11 +90,11 @@ class UserAPIController extends APIBaseController
      */
     public function destroy($id)
     {
-        $post = User::find($id);
-        if (is_null($post)) {
+        $user = User::find($id);
+        if (is_null($user)) {
             return $this->sendError('User not found.');
         }
-        $post->delete();
+        $user->delete();
         return $this->sendResponse($id, 'Usuário excluido com sucesso.');
     }
 }
