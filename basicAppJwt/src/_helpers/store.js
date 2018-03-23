@@ -4,15 +4,12 @@
 // Para criá - lo, passe sua função de redução de raiz para.createStore
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
 import rootReducer from '../_reducers';
-
-const loggerMiddleware = createLogger();
-
+// Opção de mostar um painel mostarndo o status do reducer
+import { composeWithDevTools } from 'redux-devtools-extension';
 export const store = createStore(
     rootReducer,
-    applyMiddleware(
-        thunkMiddleware,
-        loggerMiddleware
-    )
+    composeWithDevTools(applyMiddleware(
+        thunkMiddleware
+    ))
 );
