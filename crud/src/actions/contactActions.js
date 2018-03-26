@@ -1,7 +1,7 @@
-import contactConstants  from '../constants/contacts';
-import { alert as alertActions } from './alert';
-import { SubmissionError } from 'redux-form';
-var axios = require('axios');
+import contactConstants from "../constants/contacts";
+import { alert as alertActions } from "./alert";
+import { SubmissionError } from "redux-form";
+var axios = require("axios");
 
 export function getAll(url) {
   return dispatch => {
@@ -11,18 +11,18 @@ export function getAll(url) {
       .then(function (response) {
         dispatch(success(response.data))
       })
-      .catch(function (error) {
-        let message = '';
-        if (error.response){
-          error.response.data.message ?
-            message = error.response.data.message :
-            message = error.response.data.error
-        }else{
+      .catch(function(error) {
+        let message = "";
+        if (error.response) {
+          error.response.data.message
+            ? (message = error.response.data.message)
+            : (message = error.response.data.error);
+        } else {
           message = "Error 404";
         }
-        dispatch(failure(message))
-        dispatch(alertActions.error(message))
-    });
+        dispatch(failure(message));
+        dispatch(alertActions.error(message));
+      });
   };
   function request() { return { type: contactConstants.GETALL_REQUEST }; }
   function success(contacts) { return { type: contactConstants.GETALL_SUCCESS, payload:contacts }; }
@@ -38,18 +38,18 @@ export function getContact(id) {
 
         dispatch(success(response))
       })
-      .catch(function (error) {
-        let message = '';
+      .catch(function(error) {
+        let message = "";
         if (error.response) {
-          error.response.data.message ?
-            message = error.response.data.message :
-            message = error.response.data.error
+          error.response.data.message
+            ? (message = error.response.data.message)
+            : (message = error.response.data.error);
         } else {
           message = "Error 404";
         }
-        dispatch(failure(id,message))
-        dispatch(alertActions.error(message))
-    });
+        dispatch(failure(id, message));
+        dispatch(alertActions.error(message));
+      });
   };
 
   function request(id) { return { type: contactConstants.GET_REQUEST, id }; }
@@ -100,37 +100,37 @@ export function newContact() {
   return dispatch => {
     dispatch({
       type: contactConstants.NEW_REQUEST
-    })
-  }
+    });
+  };
 }
 
 export function createContact(contact) {
   return dispatch => {
-    dispatch(alertActions.clear())
+    dispatch(alertActions.clear());
     dispatch(request(contact));
-    return axios.post("contacts" , contact)
-      .then(function (response) {
-        dispatch(alertActions.success(response.data.message))
-        dispatch(success(response.data.data))
+    return axios
+      .post("contacts", contact)
+      .then(function(response) {
+        dispatch(alertActions.success(response.data.message));
+        dispatch(success(response.data.data));
       })
-      .catch(function (error) {
-        let message = '';
+      .catch(function(error) {
+        let message = "";
         let errors = [];
         if (!error.response) {
-          message = 'network error';
-        }else{
-          message = error.response.data.error
-          if (error.response.data.data){
+          message = "network error";
+        } else {
+          message = error.response.data.error;
+          if (error.response.data.data) {
             message = error.response.data.message;
             const { name, last_name, phone, email } = error.response.data.data;
             errors = { global: message, name: name, last_name, phone, email };
           }
         }
-        dispatch(failure(errors))
-        dispatch(alertActions.error(message))
+        dispatch(failure(errors));
+        dispatch(alertActions.error(message));
         return Promise.reject(errors);
       });
-
   };
 
   function request(contact) { return { type: contactConstants.CREATE_REQUEST, contact }; }

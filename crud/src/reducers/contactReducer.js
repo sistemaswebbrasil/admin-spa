@@ -1,4 +1,4 @@
-import contactConstants from '../constants/contacts';
+import contactConstants from "../constants/contacts";
 
 const defaultState = {
   items: [],
@@ -26,20 +26,18 @@ export default (state = defaultState, action = {}) => {
         ...state,
         error: action.error
       };
-    case contactConstants.NEW_REQUEST : {
+    case contactConstants.NEW_REQUEST: {
       return {
         ...state,
         contact: {}
       }
     }
-
     case contactConstants.CREATE_REQUEST: {
       return {
         ...state,
         loading: true
-      }
+      };
     }
-
     case contactConstants.CREATE_SUCCESS: {
       return {
         ...state,
@@ -62,7 +60,6 @@ export default (state = defaultState, action = {}) => {
         loading: false
       }
     }
-
     case contactConstants.CREATE_FAILURE: {
         return {
           ...state,
