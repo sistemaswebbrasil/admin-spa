@@ -58,6 +58,7 @@ class ContactForm extends Component {
     const { handleSubmit, pristine, submitting, loading, contact } = this.props;
     return (
       <Grid centered columns={2}>
+        <h1>contact:{JSON.stringify(this.props.contact)}</h1>
         <Grid.Column>
           <h1 style={{marginTop:"1em"}}>{contact.id ? 'Edit Contact' : 'Add New Contact'}</h1>
           <Form onSubmit={handleSubmit} loading={loading}>

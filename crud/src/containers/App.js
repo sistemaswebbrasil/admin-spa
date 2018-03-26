@@ -10,6 +10,7 @@ import ContactFormPage from './ContactFormPage';
 import Footer from '../components/Footer';
 import Alerts from '../components/Alerts';
 import { alert } from '../actions/alert';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 class App extends Component {
   constructor(props) {
@@ -41,13 +42,16 @@ class App extends Component {
         </Menu>
         <div className="Site-content">
           <Container text style={{ marginTop: '7em' }}>
+
             {alert.message &&
               <Alerts alert={alert} />
             }
+            <ErrorBoundary>
             <Route exact path="/" component={Home} />
             <Route exact path="/contacts" component={Contact} />
             <Route path="/contacts/new" component={ContactFormPage} />
             <Route path="/contacts/edit/:id" component={ContactFormPage} />
+            </ErrorBoundary>
           </Container>
         </div>
         <Footer />

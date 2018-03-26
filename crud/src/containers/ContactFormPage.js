@@ -40,7 +40,7 @@ class ContactFormPage extends Component {
             return this.props.updateContact(contact)
                 .then(response => this.setState({ redirect: true }))
                 .catch(err => {
-                    throw new SubmissionError(this.props.errors)
+                    throw new SubmissionError(err)
                 })
         }
     }
@@ -48,6 +48,7 @@ class ContactFormPage extends Component {
     render() {
         return (
             <div>
+                <h1>param:{JSON.stringify(this.props.match.params)}</h1>
                 <ContactForm contact={this.props.contact}  loading={this.props.contacts.loading} onSubmit={this.submit} />
             </div>
         )
@@ -55,10 +56,11 @@ class ContactFormPage extends Component {
 }
 
 function mapStateToProps(state) {
-    const { contacts } = state;
+    //const { contacts } = state;
     return {
-        contact: state.contacts,
-        contacts: contacts
+        contact: state.contacts.contact,
+        //contact: state.contacts,
+        contacts: state.contacts
     };
 }
 

@@ -9,7 +9,7 @@ export function getAll(url) {
 
     axios.get("contacts")
       .then(function (response) {
-        dispatch(success(response.data.data))
+        dispatch(success(response.data))
       })
       .catch(function (error) {
         let message = '';
@@ -25,7 +25,7 @@ export function getAll(url) {
     });
   };
   function request() { return { type: contactConstants.GETALL_REQUEST }; }
-  function success(contacts) { return { type: contactConstants.GETALL_SUCCESS, contacts }; }
+  function success(contacts) { return { type: contactConstants.GETALL_SUCCESS, payload:contacts }; }
   function failure(error) { return { type: contactConstants.GETALL_FAILURE, error }; }
 }
 
@@ -35,7 +35,8 @@ export function getContact(id) {
 
     axios.get("contacts/"+id)
       .then(function (response) {
-        dispatch(success(response.data.data))
+
+        dispatch(success(response))
       })
       .catch(function (error) {
         let message = '';
@@ -52,33 +53,46 @@ export function getContact(id) {
   };
 
   function request(id) { return { type: contactConstants.GET_REQUEST, id }; }
-  function success(id) { return { type: contactConstants.GET_SUCCESS, id }; }
+  function success(contact) { return { type: contactConstants.GET_SUCCESS, payload: contact }; }
   function failure(id, error) { return { type: contactConstants.GET_FAILURE, id, error }; }
 }
+
+// return dispatch({
+//   type: 'FETCH_CONTACT',
+//   payload: client.get(`${url}/${id}`)
+// })
+
+
 
 export function updateContact(contact) {
   return dispatch => {
     dispatch(request(contact));
-    axios.put("contacts" + contact.id, { contact })
+    return axios.put("contacts/" + contact.id,  contact )
       .then(function (response) {
+        dispatch(alertActions.success(response.data.message))
         dispatch(success(response.data.data))
       })
       .catch(function (error) {
         let message = '';
-        if (error.response) {
-          error.response.data.message ?
-            message = error.response.data.message :
-            message = error.response.data.error
+        let errors = [];
+        if (!error.response) {
+          message = 'network error';
         } else {
-          message = "Error 404";
+          message = error.response.data.error
+          if (error.response.data.data) {
+            message = error.response.data.message;
+            const { name, last_name, phone, email } = error.response.data.data;
+            errors = { global: message, name: name, last_name, phone, email };
+          }
         }
-        dispatch(failure(message))
+        dispatch(failure(errors))
         dispatch(alertActions.error(message))
+        return Promise.reject(errors);
       });
   };
 
   function request(user) { return { type: contactConstants.UPDATE_REQUEST, contact }; }
-  function success(user) { return { type: contactConstants.UPDATE_REQUEST, contact }; }
+  function success(user) { return { type: contactConstants.UPDATE_REQUEST, payload: contact }; }
   function failure(error) { return { type: contactConstants.UPDATE_FAILURE, error }; }
 }
 
@@ -120,7 +134,7 @@ export function createContact(contact) {
   };
 
   function request(contact) { return { type: contactConstants.CREATE_REQUEST, contact }; }
-  function success(contact) { return { type: contactConstants.CREATE_SUCCESS, contact }; }
+  function success(contact) { return { type: contactConstants.CREATE_SUCCESS, payload:contact }; }
   function failure(error) { return { type: contactConstants.CREATE_FAILURE, error }; }
 
 

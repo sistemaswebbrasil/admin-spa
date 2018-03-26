@@ -42,7 +42,7 @@ class ContactForm extends Component {
     const { handleSubmit, pristine, submitting, contact, invalid, reset, loading} = this.props;
     return (
       <div>
-        <h1>contact:{JSON.stringify(this.props.contact) }</h1>
+        <h1>contact:{JSON.stringify(contact) }</h1>
       <Grid centered >
         <Grid.Column>
           <h1 style={{ marginTop: "1em" }}>{contact.id ? 'Edit Contact' : 'Add New Contact'}</h1>

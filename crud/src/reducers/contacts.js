@@ -1,22 +1,35 @@
 import contactConstants from '../constants/contacts';
 
-export default function contacts(state = {}, action) {
+const defaultState = {
+  items: [],
+  contact: {},
+  loading: false,
+  errors: {}
+}
+
+export default (state = defaultState, action = {}) => {
   switch (action.type) {
     case contactConstants.GETALL_REQUEST:
       return {
+        ...state,
         loading: true
       };
     case contactConstants.GETALL_SUCCESS:
       return {
-        items: action.contacts
+        ...state,
+        // items: action.contacts,
+        items: action.payload.data,
+        loading: false
       };
     case contactConstants.GETALL_FAILURE:
       return {
+        ...state,
         error: action.error
       };
     case contactConstants.NEW_REQUEST : {
       return {
-        ...state
+        ...state,
+        contact: {}
       }
     }
 
@@ -30,58 +43,33 @@ export default function contacts(state = {}, action) {
     case contactConstants.CREATE_SUCCESS: {
       return {
         ...state,
-        contact: action.contact
+        contact: action.payload,
+        loading: false
+      }
+    }
+
+    case contactConstants.GET_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+
+    case contactConstants.GET_SUCCESS : {
+      return {
+        ...state,
+        contact: action.payload.data,
+        loading: false
       }
     }
 
     case contactConstants.CREATE_FAILURE: {
-        // const data = action.payload.response.data;
-        // // convert feathers error formatting to match client-side error formatting
-        // const { name, last_name, phone, email } = data.errors;
-        // const errors = { global: data.message, name: name, last_name, phone, email };
         return {
           ...state,
           errors: action.error,
           loading: false
         }
       }
-
-
-    // case 'SAVE_CONTACT_PENDING': {
-    //   return {
-    //     ...state,
-    //     loading: true
-    //   }
-    // }
-
-    // case 'SAVE_CONTACT_FULFILLED': {
-    //   return {
-    //     ...state,
-    //     contacts: [...state.contacts, action.payload.data],
-    //     errors: {},
-    //     loading: false
-    //   }
-    // }
-
-    // case 'SAVE_CONTACT_REJECTED': {
-    //   const data = action.payload.response.data;
-    //   // convert feathers error formatting to match client-side error formatting
-    //   const { name, last_name, phone, email } = data.errors;
-    //   const errors = { global: data.message, name: name, last_name, phone, email };
-    //   return {
-    //     ...state,
-    //     errors: errors,
-    //     loading: false
-    //   }
-    // }
-
-
-
-
-
-
-
-
     default:
       return state;
   }

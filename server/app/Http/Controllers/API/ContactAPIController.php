@@ -72,10 +72,15 @@ class ContactAPIController extends APIBaseController
             'name' => 'required'
         ]);
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
-        Contact::find($id)->update($input);
-        return $this->sendResponse($contact->toArray(), 'Contato Atualizado com sucesso.');
+        $contact = Contact::find($id);
+        $contact->update($input);
+
+
+
+
+        return $this->sendResponse($contact, 'Contato Atualizado com sucesso.');
     }
 
     /**

@@ -43,7 +43,7 @@ const ContactList = (props) => {
                           {/* <Button floated='right' icon labelPosition='left' primary size='small'>
                               <Icon name='user' /> Add Contact
                           </Button> */}
-                          <Link to={`/contacts/new`} className="ui basic button green" primary size='small' ><Icon name='user' /> Add Contact</Link>
+                          <Link to={`/contacts/new`} className="ui basic button green" primary="true" size='small' ><Icon name='user' /> Add Contact</Link>
                       </Table.HeaderCell>
                   </Table.Row>
               </Table.Footer>
