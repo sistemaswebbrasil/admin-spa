@@ -30,7 +30,7 @@ const ContactList = props => {
                     >
                       Edit
                     </Link>
-                    {/* <Button basic color="red" onClick={() => deleteContact(contact.id)} >Delete</Button> */}
+                    <Button basic color="red" onClick={() => props.deleteContact(contact.id)} >Delete</Button>
                   </div>
                 </Table.Cell>
               </Table.Row>
@@ -41,14 +41,11 @@ const ContactList = props => {
           <Table.Row>
             <Table.HeaderCell />
             <Table.HeaderCell colSpan="4">
-              {/* <Button floated='right' icon labelPosition='left' primary size='small'>
-                              <Icon name='user' /> Add Contact
-                          </Button> */}
-                          <Link to={`/contacts/new`} className="ui basic button green" primary="true" size='small' ><Icon name='user' /> Add Contact</Link>
-                      </Table.HeaderCell>
-                  </Table.Row>
-              </Table.Footer>
-          </Table>
+              <Link to={`/contacts/new`} className="ui basic button green" primary="true" size='small' ><Icon name='user' /> Add Contact</Link>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
     </div>
   );
 };

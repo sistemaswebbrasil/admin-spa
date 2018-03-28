@@ -1,33 +1,47 @@
 import React, { Component } from "react";
 import { Form, Grid, Button, Message, Icon, Loader } from "semantic-ui-react";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, reset } from "redux-form";
 import classnames from "classnames";
+import normalizePhone from "../helpers/normalizePhone";
+import { getByEmail} from "../actions/contactActions";
+
 
 const validate = values => {
   const errors = {};
   if (!values.name) {
     errors.name = "Required";
   }
-  if (!values.email) {
-    errors.email = "Required";
-  }
+  // if (!values.email) {
+  //   errors.email = "Required";
+  // }
   return errors;
 };
+
+// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+const asyncValidate = (values /*, dispatch */) => {
+  if (values.email) {
+    return getByEmail(values.email);
+  }
+}
 
 class ContactForm extends Component {
   componentWillReceiveProps = nextProps => {
     // Load Contact Asynchronously
     const { contact } = nextProps;
-    if (contact.id != this.props.contact.id) {
+
+    if (contact.id !== this.props.contact.id) {
+      console.log(contact.updated_at)
+      console.log(this.props)
       // Initialize form only once
       this.props.initialize(contact);
     }
   };
 
-  renderField = ({ input, label, type, meta: { touched, error } }) => (
+  renderField = ({ input, label, type, meta: { touched, error }, disabled }) => (
     <Form.Field className={classnames({ error: touched && error })}>
       <label>{label}</label>
-      <input {...input} placeholder={label} type={type} />
+      <input {...input} placeholder={label} type={type} disabled={disabled} />
       {touched &&
         error && <span className="error">{error}</span> && (
           <Message negative>{error}</Message>
@@ -71,13 +85,30 @@ class ContactForm extends Component {
               name="phone"
               type="text"
               component={this.renderField}
-              label="Phone"
+              label="Pholast_namene"
+              normalize={normalizePhone}
             />
             <Field
               name="email"
               type="text"
               component={this.renderField}
               label="Email"
+            />
+            <Field
+              name="created_at"
+              type="text"
+              component={this.renderField}
+              label="Created At"
+              disabled
+            />
+
+            <Field
+              name="updated_at"
+              readOnly="true"
+              type="text"
+              component={this.renderField}
+              label="Update At"
+              disabled
             />
             <Button
               primary
@@ -88,7 +119,7 @@ class ContactForm extends Component {
             </Button>
             <Button
               type="button"
-              disabled={pristine || submitting}
+              disabled={submitting}
               onClick={reset}
             >
               Clear Values
@@ -104,5 +135,8 @@ class ContactForm extends Component {
 
 export default reduxForm({
   form: "ContactForm", // a unique identifier for this form
-  validate // <--- validation function given to redux-form
+  validate, // <--- validation function given to redux-form
+  asyncValidate,
+  getByEmail,
+  asyncBlurFields: ['email']
 })(ContactForm);

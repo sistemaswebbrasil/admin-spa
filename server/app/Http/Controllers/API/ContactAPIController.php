@@ -54,8 +54,24 @@ class ContactAPIController extends APIBaseController
         if (is_null($contact)) {
             return $this->sendError('Contato não encontrado');
         }
-        return response()->json($contact->toArray(), 200);
-        //return $this->sendResponse($contact->toArray(), 'Contact retrieved successfully.');
+        //return response()->json($contact->toArray(), 200);
+        return $this->sendResponse($contact->toArray(), 'Contact retrieved successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showByEmail($email)
+    {
+        $contact = Contact::where('email', $email)->get(); //Contact::find($id);
+        if (is_null($contact)) {
+            return $this->sendError('Contato não encontrado');
+        }
+        //return response()->json($contact->toArray(), 200);
+        return $this->sendResponse($contact->toArray(), 'Email encontrado.');
     }
 
     /**

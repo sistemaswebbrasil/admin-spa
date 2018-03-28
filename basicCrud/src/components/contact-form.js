@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Grid, Button } from 'semantic-ui-react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm , reset } from 'redux-form';
 import classnames from 'classnames';
 
 const validate = (values) => {
@@ -42,6 +42,8 @@ class ContactForm extends Component {
   componentWillReceiveProps = (nextProps) => { // Load Contact Asynchronously
     const { contact } = nextProps;
     if(contact.id !== this.props.contact.id) { // Initialize form only once
+      console.log(contact.updated_at)
+      console.log(this.props)
       this.props.initialize(contact)
     }
   }
@@ -55,10 +57,10 @@ class ContactForm extends Component {
   )
 
   render() {
-    const { handleSubmit, pristine, submitting, loading, contact } = this.props;
+    const { handleSubmit, pristine, submitting, loading, contact,reset } = this.props;
     return (
       <Grid centered columns={2}>
-        <h1>contact:{JSON.stringify(this.props.contact)}</h1>
+        {/* <h1>contact:{JSON.stringify(this.props.contact)}</h1> */}
         <Grid.Column>
           <h1 style={{marginTop:"1em"}}>{contact.id ? 'Edit Contact' : 'Add New Contact'}</h1>
           <Form onSubmit={handleSubmit} loading={loading}>

@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import { Redirect } from 'react-router';
-import { SubmissionError } from 'redux-form';
+import { SubmissionError, reset } from 'redux-form';
 import { connect } from 'react-redux';
 import { newContact, saveContact, fetchContact, updateContact } from '../actions/contact-actions';
 import ContactForm from '../components/contact-form';
@@ -15,7 +15,6 @@ class ContactFormPage extends Component {
   componentDidMount = () => {
     const { id } = this.props.match.params;
     if(id){
-      var teste = this.props.fetchContact(id)
       this.props.fetchContact(id)
     } else {
       this.props.newContact();
@@ -23,6 +22,8 @@ class ContactFormPage extends Component {
   }
 
   submit = (contact) => {
+    const { createRecord, reset } = this.props;
+
     if(!contact.id) {
       return this.props.saveContact(contact)
         .then(response => this.setState({ redirect:true }))
@@ -31,7 +32,14 @@ class ContactFormPage extends Component {
          })
     } else {
       return this.props.updateContact(contact)
-        .then(response => this.setState({ redirect:true }))
+        .then(response => {
+          this.setState({ redirect:false })
+          // console.log(response.data);
+          //this.props.reset();
+          reset();
+          //reset('contact');
+          this.props.reset()
+        })
         .catch(err => {
            throw new SubmissionError(this.props.errors)
          })
@@ -41,6 +49,7 @@ class ContactFormPage extends Component {
   render() {
     return (
       <div>
+        <h1>props:{JSON.stringify(this.props)}</h1>
         {
           this.state.redirect ?
           <Redirect to="/" /> :

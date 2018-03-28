@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAll } from '../actions/contactActions';
+import { getAll, deleteContact } from '../actions/contactActions';
 import { Message, Icon } from 'semantic-ui-react';
 import ContactList from "../components/ContactList";
 
 class ContactListPage extends Component {
     componentDidMount() {
         this.props.fetchData();
+    }
+
+    handleDeleteUser(id) {
+        //return () => this.props.dispatch(userActions.delete(id));
+        // return () => this.props.deleteContact(id);
+
+        this.props.deleteData(id);
     }
 
     render() {
@@ -33,7 +40,7 @@ class ContactListPage extends Component {
                 }
 
                 <h1>List of Contacts</h1>
-                <ContactList contacts={contacts} />
+                <ContactList contacts={contacts} deleteContact={this.props.deleteContact} />
             </div>
         );
     }
@@ -54,7 +61,9 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchData: (url) => dispatch(getAll(url))
+        fetchData: (url) => dispatch(getAll(url)),
+        deleteContact: (id) => dispatch(deleteContact(id))
+
     };
 };
 

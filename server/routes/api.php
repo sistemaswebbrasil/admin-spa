@@ -25,3 +25,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::resource('users', 'API\UserAPIController');
 });
 Route::resource('contacts', 'API\ContactAPIController');
+
+Route::resource('contacts', 'API\ContactAPIController');
+// Route::get('contacts/by-email/{email}', 'API\ContactAPIController@showByEmail');
+Route::get('contacts/by-email/{email}', 'API\ContactAPIController@showByEmail')->name('contacts.showByEmail');
