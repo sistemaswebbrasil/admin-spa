@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 
-import { Route, NavLink, withRouter } from "react-router-dom";
+import { Route, NavLink, withRouter, Switch } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { Container, Image, Menu, Grid } from "semantic-ui-react";
 import Home from "./Home";
 import Contact from "./ContactListPage";
 import ContactFormPage from "./ContactFormPage";
+import LoginPage from "./LoginPage";
 import Footer from "../components/Footer";
+import NotFound from "../components/NotFound";
+import PrivateRoute from "../components/PrivateRoute";
 import Alerts from "../components/Alerts";
 import { alert } from "../actions/alert";
 
@@ -21,7 +24,7 @@ class App extends Component {
   }
 
   render() {
-    const { alert } = this.props;
+    const { alert, loggedIn } = this.props;
     return (
       <div className="Site ">
         <Menu fixed="top" inverted>
@@ -34,9 +37,12 @@ class App extends Component {
               />
               React Crud
             </Menu.Item>
+            {loggedIn &&
             <NavLink className="item" activeClassName="active" exact to="/">
               Home
             </NavLink>
+            }
+            {loggedIn &&
             <NavLink
               className="item"
               activeClassName="active"
@@ -45,6 +51,8 @@ class App extends Component {
             >
               Contacts
             </NavLink>
+            }
+            {loggedIn &&
             <NavLink
               className="item"
               activeClassName="active"
@@ -53,6 +61,12 @@ class App extends Component {
             >
               New Contact
             </NavLink>
+            }
+
+            <NavLink className="item" activeClassName="active" exact to="/login">
+              {loggedIn ? 'Logout' : 'Login'}
+            </NavLink>
+
           </Container>
         </Menu>
         <div className="Site-content">
@@ -60,10 +74,22 @@ class App extends Component {
             <Grid.Row>
               <Container style={{ marginTop: "7em", marginBottom: "5em" }}>
                 {alert.message && <Alerts alert={alert} />}
-                <Route exact path="/" component={Home} />
-                <Route exact path="/contacts" component={Contact} />
-                <Route path="/contacts/new" component={ContactFormPage} />
-                <Route path="/contacts/edit/:id" component={ContactFormPage} />
+
+                <Switch>
+                  {/* <PrivateRoute path="/" exact component={HomePage} />
+                  <Route path="/login" exact component={LoginPage} />
+                  <PrivateRoute path="/users" exact component={UserPage} />
+                  <Route path="/register" exact component={RegisterPage} /> */}
+
+
+                  <PrivateRoute exact path="/" component={Home} />
+                  <PrivateRoute path="/contacts" exact component={Contact} />
+                  <PrivateRoute path="/contacts/new" component={ContactFormPage} />
+                  <PrivateRoute path="/contacts/edit/:id" component={ContactFormPage} />
+                  <Route path="/login" component={LoginPage} />
+                  { /* Finally, catch all unmatched routes */}
+                  <Route component={NotFound} />
+                </Switch>
               </Container>
             </Grid.Row>
           </Grid>
@@ -75,9 +101,12 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { alert } = state;
+  const { alert, authentication } = state;
+  const { user, loggedIn } = authentication;
   return {
-    alert
+    alert,
+    user,
+    loggedIn
   };
 }
 

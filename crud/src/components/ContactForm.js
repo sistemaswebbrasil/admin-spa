@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Form, Grid, Button, Message, Icon, Loader } from "semantic-ui-react";
-import { Field, reduxForm, reset } from "redux-form";
+import { Form, Grid, Button, Message } from "semantic-ui-react";
+import { Field, reduxForm } from "redux-form";
 import classnames from "classnames";
 import normalizePhone from "../helpers/normalizePhone";
 import { getByEmail} from "../actions/contactActions";

@@ -1,6 +1,5 @@
 import contactConstants from "../constants/contacts";
 import { alert as alertActions } from "./alert";
-import { SubmissionError } from "redux-form";
 import contactService from '../services/contactService';
 
 export function getAll(url) {
@@ -52,14 +51,15 @@ export function getByEmail(email) {
     .then(
       contact => {
         if (contact.data.length){
-          throw { email: 'That email is used' }
+          // throw { email: 'That email is used' }
+          throw new Error({ email: 'That email is used' });
         }
       },
       error => {
-        throw { email: 'Server offline' }
+        // throw { email: 'Server offline' }
+        throw new Error({ email: 'Server offline' });
       }
     );
-
 }
 
 export function updateContact(contact) {

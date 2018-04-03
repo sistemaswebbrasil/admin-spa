@@ -7,6 +7,7 @@ import App from './containers/App';
 import defaultApi from './helpers/default-api';
 import 'semantic-ui-css/semantic.min.css';
 import './index.css';
+import registerServiceWorker from './registerServiceWorker';
 
 defaultApi();
 
@@ -21,3 +22,5 @@ render(
     </Provider>,
     target
 );
+
+registerServiceWorker();

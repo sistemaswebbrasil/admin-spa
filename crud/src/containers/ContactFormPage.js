@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router";
-import { SubmissionError, resetForm } from "redux-form";
+import { SubmissionError } from "redux-form";
 import { connect } from "react-redux";
 import {
     newContact,
@@ -9,7 +8,6 @@ import {
     updateContact
 } from "../actions/contactActions";
 import ContactForm from "../components/ContactForm";
-import { bindActionCreators } from "redux";
 
 class ContactFormPage extends Component {
     state = {

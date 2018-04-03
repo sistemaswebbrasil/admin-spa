@@ -102,7 +102,7 @@ export default (state = defaultState, action = {}) => {
     case contactConstants.DELETE_SUCCESS:
       return {
         loading: false,
-        items: state.items.filter(contact => contact.id != action.id)
+        items: state.items.filter(contact => contact.id !== action.id)
       };
     case contactConstants.DELETE_FAILURE:
       return {

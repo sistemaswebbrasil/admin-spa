@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Label, Menu, Table, Button } from "semantic-ui-react";
+import { Icon, Table, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 const ContactList = props => {
