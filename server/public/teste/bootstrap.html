@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://www.dropzonejs.com/bootstrap.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="=&quot;utf-8&quot;">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="./bootstrap_files/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="./bootstrap_files/bootstrap-theme.min.css">
+
+  <script src="./bootstrap_files/dropzone.js"></script>
+  <script>
+    Dropzone.autoDiscover = false;
+  </script>
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+    #actions {
+      margin: 2em 0;
+    }
+
+
+    /* Mimic table appearance */
+    div.table {
+      display: table;
+    }
+    div.table .file-row {
+      display: table-row;
+    }
+    div.table .file-row > div {
+      display: table-cell;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+      padding: 8px;
+    }
+    div.table .file-row:nth-child(odd) {
+      background: #f9f9f9;
+    }
+
+
+
+    /* The total progress gets shown by event listeners */
+    #total-progress {
+      opacity: 0;
+      transition: opacity 0.3s linear;
+    }
+
+    /* Hide the progress bar when finished */
+    #previews .file-row.dz-success .progress {
+      opacity: 0;
+      transition: opacity 0.3s linear;
+    }
+
+    /* Hide the delete button initially */
+    #previews .file-row .delete {
+      display: none;
+    }
+
+    /* Hide the start and cancel buttons and show the delete button */
+
+    #previews .file-row.dz-success .start,
+    #previews .file-row.dz-success .cancel {
+      display: none;
+    }
+    #previews .file-row.dz-success .delete {
+      display: block;
+    }
+
+
+  </style>
+
+<script>console.inject = function (library) {
+
+      function getURLs() {
+        var xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+            if(xmlhttp.status == 200){
+              var libraries = JSON.parse(xmlhttp.responseText).results;
+              var foundLib = libraries.reduce(function (found, item) {
+                if (item.name === library || item.name === library + '.js') {
+                  found = item;
+                }
+                return found;
+              }, undefined);
+
+              if (foundLib) {
+                var url = foundLib.latest.replace('http:', 'https:');
+                var libScript =document.createElement('script');
+                libScript.src = url;
+                document.head.appendChild(libScript);
+                return console.log('library injected from ' + url);
+              } else {
+                console.log('library "' + library + '" not found');
+              }
+            }
+            else { console.log(XMLHttpRequestlhttp.status)}
+          }
+        }
+
+        var searchString = 'https://api.cdnjs.com/libraries?search=' + library;
+        xmlhttp.open("GET", searchString, true);
+        xmlhttp.send();
+      }
+
+      getURLs();
+    }</script></head>
+<body>
+
+  <div class="container" id="container">
+    <h1>Dropzone.js</h1>
+    <h2 class="lead">Configuration Demo</h2>
+
+    <ul class="nav nav-tabs">
+      <li><a href="http://www.dropzonejs.com/">Back to www.dropzonejs.com</a></li>
+      <li class="active"><a href="http://www.dropzonejs.com/bootstrap.html#">Bootstrap theme</a></li>
+    </ul>
+
+    <br>
+
+    <blockquote>
+      <p>
+        This is a bootstrap theme of Dropzone.js with a completely different user experience.<br>
+        It is a demonstration of the powerful configuration possibilities of <a href="http://www.dropzonejs.com/">Dropzone.js</a>.
+        You can make Dropzone.js look exactly how you want it to look and it's very easy to do so.
+      </p>
+    </blockquote>
+
+    <br>
+    <div id="actions" class="row">
+
+      <div class="col-lg-7">
+        <!-- The fileinput-button span is used to style the file input field as button -->
+        <span class="btn btn-success fileinput-button dz-clickable">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Add files...</span>
+        </span>
+        <button type="submit" class="btn btn-primary start">
+            <i class="glyphicon glyphicon-upload"></i>
+            <span>Start upload</span>
+        </button>
+        <button type="reset" class="btn btn-warning cancel">
+            <i class="glyphicon glyphicon-ban-circle"></i>
+            <span>Cancel upload</span>
+        </button>
+      </div>
+
+      <div class="col-lg-5">
+        <!-- The global file processing state -->
+        <span class="fileupload-process">
+          <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="opacity: 0;">
+            <div class="progress-bar progress-bar-success" style="width: 100%;" data-dz-uploadprogress=""></div>
+          </div>
+        </span>
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+
+    <div class="table table-striped files" id="previews">
+
+
+
+    </div>
+
+    <script>
+      // Get the template HTML and remove it from the doument
+      var previewNode = document.querySelector("#template");
+      previewNode.id = "#previews";
+      var previewTemplate = previewNode.parentNode.innerHTML;
+      previewNode.parentNode.removeChild(previewNode);
+
+      var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: "http://www.torrentplease.com/dropzone.php", // Set the url
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        parallelUploads: 20,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+      });
+
+      myDropzone.on("addedfile", function(file) {
+        // Hookup the start button
+        file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+      });
+
+      // Update the total progress bar
+      myDropzone.on("totaluploadprogress", function(progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+      });
+
+      myDropzone.on("sending", function(file) {
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1";
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+      });
+
+      // Hide the total progress bar when nothing's uploading anymore
+      myDropzone.on("queuecomplete", function(progress) {
+        document.querySelector("#total-progress").style.opacity = "0";
+      });
+
+      // Setup the buttons for all transfers
+      // The "add files" button doesn't need to be setup because the config
+      // `clickable` has already been specified.
+      document.querySelector("#actions .start").onclick = function() {
+        myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+      };
+      document.querySelector("#actions .cancel").onclick = function() {
+        myDropzone.removeAllFiles(true);
+      };
+
+
+
+
+
+      // Now fake the file upload, since GitHub does not handle file uploads
+      // and returns a 404
+
+      var minSteps = 6,
+          maxSteps = 60,
+          timeBetweenSteps = 100,
+          bytesPerStep = 100000;
+
+      myDropzone.uploadFiles = function(files) {
+        var self = this;
+
+        for (var i = 0; i < files.length; i++) {
+
+          var file = files[i];
+          totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
+
+          for (var step = 0; step < totalSteps; step++) {
+            var duration = timeBetweenSteps * (step + 1);
+            setTimeout(function(file, totalSteps, step) {
+              return function() {
+                file.upload = {
+                  progress: 100 * (step + 1) / totalSteps,
+                  total: file.size,
+                  bytesSent: (step + 1) * file.size / totalSteps
+                };
+
+                self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
+                if (file.upload.progress == 100) {
+                  file.status = Dropzone.SUCCESS;
+                  self.emit("success", file, 'success', null);
+                  self.emit("complete", file);
+                  self.processQueue();
+                }
+              };
+            }(file, totalSteps, step), duration);
+          }
+        }
+      }
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <h3 class="panel-title">Advantages</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+            <li>No jQuery dependency</li>
+            <li>Extremely easy configuration so it looks exactly how you want it to look</li>
+            <li>Fast fast fast.</li>
+        </ul>
+      </div>
+    </div>
+
+
+    <br><br><br>
+
+    <h1>How it's done</h1>
+
+    <p>
+      For a complete understanding of how Dropzone.js works please see the
+      <a href="https://github.com/enyo/dropzone/wiki/How-to-theme-Dropzone">tutorial for Dropzone theming</a>
+      and visit the website
+      <a href="http://www.dropzonejs.com/">www.dropzonejs.com</a> to see the full
+      documentation.
+    </p>
+
+    <p>
+      Basically Dropzone just does all the heavy lifting for you, and exposes a
+      very high level API that you can use to build your user interface.<br>
+      The main feature of Dropzone is its events that you can listen to, so you
+      can react to every change.
+    </p>
+
+    <p>
+      This is the HTML that is used as template for every file dropped:
+    </p>
+
+    <script src="./bootstrap_files/6ba8ce090590421bf134.js"></script><link rel="stylesheet" href="./bootstrap_files/gist-embed-1baaff35daab552f019ad459494450f1.css"><div id="gist11456091" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-jquery-dropzone-html" class="file">
+
+
+  <div itemprop="text" class="blob-wrapper data type-html">
+      <table class="highlight tab-size js-file-line-container" data-tab-size="8">
+      <tbody><tr>
+        <td id="file-jquery-dropzone-html-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-jquery-dropzone-html-LC1" class="blob-code blob-code-inner js-file-line"><span class="pl-c"><span class="pl-c">&lt;!--</span> HTML heavily inspired by http://blueimp.github.io/jQuery-File-Upload/ <span class="pl-c">--&gt;</span></span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-jquery-dropzone-html-LC2" class="blob-code blob-code-inner js-file-line">&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>table table-striped<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>files<span class="pl-pds">"</span></span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>previews<span class="pl-pds">"</span></span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-jquery-dropzone-html-LC3" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-jquery-dropzone-html-LC4" class="blob-code blob-code-inner js-file-line">  &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>template<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>file-row<span class="pl-pds">"</span></span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-jquery-dropzone-html-LC5" class="blob-code blob-code-inner js-file-line">    <span class="pl-c"><span class="pl-c">&lt;!--</span> This is used as the file preview template <span class="pl-c">--&gt;</span></span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-jquery-dropzone-html-LC6" class="blob-code blob-code-inner js-file-line">    &lt;<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-jquery-dropzone-html-LC7" class="blob-code blob-code-inner js-file-line">        &lt;<span class="pl-ent">span</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>preview<span class="pl-pds">"</span></span>&gt;&lt;<span class="pl-ent">img</span> <span class="pl-e">data-dz-thumbnail</span> /&gt;&lt;/<span class="pl-ent">span</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-jquery-dropzone-html-LC8" class="blob-code blob-code-inner js-file-line">    &lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-jquery-dropzone-html-LC9" class="blob-code blob-code-inner js-file-line">    &lt;<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-jquery-dropzone-html-LC10" class="blob-code blob-code-inner js-file-line">        &lt;<span class="pl-ent">p</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span> <span class="pl-e">data-dz-name</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L11" class="blob-num js-line-number" data-line-number="11"></td>
+        <td id="file-jquery-dropzone-html-LC11" class="blob-code blob-code-inner js-file-line">        &lt;<span class="pl-ent">strong</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>error text-danger<span class="pl-pds">"</span></span> <span class="pl-e">data-dz-errormessage</span>&gt;&lt;/<span class="pl-ent">strong</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L12" class="blob-num js-line-number" data-line-number="12"></td>
+        <td id="file-jquery-dropzone-html-LC12" class="blob-code blob-code-inner js-file-line">    &lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L13" class="blob-num js-line-number" data-line-number="13"></td>
+        <td id="file-jquery-dropzone-html-LC13" class="blob-code blob-code-inner js-file-line">    &lt;<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L14" class="blob-num js-line-number" data-line-number="14"></td>
+        <td id="file-jquery-dropzone-html-LC14" class="blob-code blob-code-inner js-file-line">        &lt;<span class="pl-ent">p</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>size<span class="pl-pds">"</span></span> <span class="pl-e">data-dz-size</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L15" class="blob-num js-line-number" data-line-number="15"></td>
+        <td id="file-jquery-dropzone-html-LC15" class="blob-code blob-code-inner js-file-line">        &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>progress progress-striped active<span class="pl-pds">"</span></span> <span class="pl-e">role</span>=<span class="pl-s"><span class="pl-pds">"</span>progressbar<span class="pl-pds">"</span></span> <span class="pl-e">aria-valuemin</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">aria-valuemax</span>=<span class="pl-s"><span class="pl-pds">"</span>100<span class="pl-pds">"</span></span> <span class="pl-e">aria-valuenow</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L16" class="blob-num js-line-number" data-line-number="16"></td>
+        <td id="file-jquery-dropzone-html-LC16" class="blob-code blob-code-inner js-file-line">          &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>progress-bar progress-bar-success<span class="pl-pds">"</span></span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width:0%;<span class="pl-pds">"</span></span> <span class="pl-e">data-dz-uploadprogress</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L17" class="blob-num js-line-number" data-line-number="17"></td>
+        <td id="file-jquery-dropzone-html-LC17" class="blob-code blob-code-inner js-file-line">        &lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L18" class="blob-num js-line-number" data-line-number="18"></td>
+        <td id="file-jquery-dropzone-html-LC18" class="blob-code blob-code-inner js-file-line">    &lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L19" class="blob-num js-line-number" data-line-number="19"></td>
+        <td id="file-jquery-dropzone-html-LC19" class="blob-code blob-code-inner js-file-line">    &lt;<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L20" class="blob-num js-line-number" data-line-number="20"></td>
+        <td id="file-jquery-dropzone-html-LC20" class="blob-code blob-code-inner js-file-line">      &lt;<span class="pl-ent">button</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>btn btn-primary start<span class="pl-pds">"</span></span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L21" class="blob-num js-line-number" data-line-number="21"></td>
+        <td id="file-jquery-dropzone-html-LC21" class="blob-code blob-code-inner js-file-line">          &lt;<span class="pl-ent">i</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>glyphicon glyphicon-upload<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">i</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L22" class="blob-num js-line-number" data-line-number="22"></td>
+        <td id="file-jquery-dropzone-html-LC22" class="blob-code blob-code-inner js-file-line">          &lt;<span class="pl-ent">span</span>&gt;Start&lt;/<span class="pl-ent">span</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L23" class="blob-num js-line-number" data-line-number="23"></td>
+        <td id="file-jquery-dropzone-html-LC23" class="blob-code blob-code-inner js-file-line">      &lt;/<span class="pl-ent">button</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L24" class="blob-num js-line-number" data-line-number="24"></td>
+        <td id="file-jquery-dropzone-html-LC24" class="blob-code blob-code-inner js-file-line">      &lt;<span class="pl-ent">button</span> <span class="pl-e">data-dz-remove</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>btn btn-warning cancel<span class="pl-pds">"</span></span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L25" class="blob-num js-line-number" data-line-number="25"></td>
+        <td id="file-jquery-dropzone-html-LC25" class="blob-code blob-code-inner js-file-line">          &lt;<span class="pl-ent">i</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>glyphicon glyphicon-ban-circle<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">i</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L26" class="blob-num js-line-number" data-line-number="26"></td>
+        <td id="file-jquery-dropzone-html-LC26" class="blob-code blob-code-inner js-file-line">          &lt;<span class="pl-ent">span</span>&gt;Cancel&lt;/<span class="pl-ent">span</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L27" class="blob-num js-line-number" data-line-number="27"></td>
+        <td id="file-jquery-dropzone-html-LC27" class="blob-code blob-code-inner js-file-line">      &lt;/<span class="pl-ent">button</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L28" class="blob-num js-line-number" data-line-number="28"></td>
+        <td id="file-jquery-dropzone-html-LC28" class="blob-code blob-code-inner js-file-line">      &lt;<span class="pl-ent">button</span> <span class="pl-e">data-dz-remove</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>btn btn-danger delete<span class="pl-pds">"</span></span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L29" class="blob-num js-line-number" data-line-number="29"></td>
+        <td id="file-jquery-dropzone-html-LC29" class="blob-code blob-code-inner js-file-line">        &lt;<span class="pl-ent">i</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>glyphicon glyphicon-trash<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">i</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L30" class="blob-num js-line-number" data-line-number="30"></td>
+        <td id="file-jquery-dropzone-html-LC30" class="blob-code blob-code-inner js-file-line">        &lt;<span class="pl-ent">span</span>&gt;Delete&lt;/<span class="pl-ent">span</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L31" class="blob-num js-line-number" data-line-number="31"></td>
+        <td id="file-jquery-dropzone-html-LC31" class="blob-code blob-code-inner js-file-line">      &lt;/<span class="pl-ent">button</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L32" class="blob-num js-line-number" data-line-number="32"></td>
+        <td id="file-jquery-dropzone-html-LC32" class="blob-code blob-code-inner js-file-line">    &lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L33" class="blob-num js-line-number" data-line-number="33"></td>
+        <td id="file-jquery-dropzone-html-LC33" class="blob-code blob-code-inner js-file-line">  &lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L34" class="blob-num js-line-number" data-line-number="34"></td>
+        <td id="file-jquery-dropzone-html-LC34" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-html-L35" class="blob-num js-line-number" data-line-number="35"></td>
+        <td id="file-jquery-dropzone-html-LC35" class="blob-code blob-code-inner js-file-line">&lt;/<span class="pl-ent">div</span>&gt;</td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/enyo/6ba8ce090590421bf134/raw/d6d709c5004daf919fec6d411fca82e6a16a9f46/jquery-dropzone.html" style="float:right">view raw</a>
+        <a href="https://gist.github.com/enyo/6ba8ce090590421bf134#file-jquery-dropzone-html">jquery-dropzone.html</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+
+
+    <p>
+
+      As you can see, it's just basic bootstrap HTML that defines how a file
+      should look like. The most important aspect, is that there are
+      <code>data-dz-*</code> markers in the markup, so that Dropzone can update the
+      elements automatically.
+
+    </p>
+
+    <p>
+      The JavaScript should be self explanatory:
+    </p>
+
+    <script src="./bootstrap_files/0def0ce04d744fffcee4.js"></script><link rel="stylesheet" href="./bootstrap_files/gist-embed-1baaff35daab552f019ad459494450f1.css"><div id="gist11456126" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-jquery-dropzone-js" class="file">
+
+
+  <div itemprop="text" class="blob-wrapper data type-javascript">
+      <table class="highlight tab-size js-file-line-container" data-tab-size="8">
+      <tbody><tr>
+        <td id="file-jquery-dropzone-js-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-jquery-dropzone-js-LC1" class="blob-code blob-code-inner js-file-line"><span class="pl-c"><span class="pl-c">//</span> Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-jquery-dropzone-js-LC2" class="blob-code blob-code-inner js-file-line"><span class="pl-k">var</span> previewNode <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>#template<span class="pl-pds">"</span></span>);</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-jquery-dropzone-js-LC3" class="blob-code blob-code-inner js-file-line"><span class="pl-smi">previewNode</span>.<span class="pl-c1">id</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-jquery-dropzone-js-LC4" class="blob-code blob-code-inner js-file-line"><span class="pl-k">var</span> previewTemplate <span class="pl-k">=</span> <span class="pl-smi">previewNode</span>.<span class="pl-c1">parentNode</span>.<span class="pl-smi">innerHTML</span>;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-jquery-dropzone-js-LC5" class="blob-code blob-code-inner js-file-line"><span class="pl-smi">previewNode</span>.<span class="pl-c1">parentNode</span>.<span class="pl-c1">removeChild</span>(previewNode);</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-jquery-dropzone-js-LC6" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-jquery-dropzone-js-LC7" class="blob-code blob-code-inner js-file-line"><span class="pl-k">var</span> myDropzone <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Dropzone</span>(<span class="pl-c1">document</span>.<span class="pl-c1">body</span>, { <span class="pl-c"><span class="pl-c">//</span> Make the whole body a dropzone</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-jquery-dropzone-js-LC8" class="blob-code blob-code-inner js-file-line">  url<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/target-url<span class="pl-pds">"</span></span>, <span class="pl-c"><span class="pl-c">//</span> Set the url</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-jquery-dropzone-js-LC9" class="blob-code blob-code-inner js-file-line">  thumbnailWidth<span class="pl-k">:</span> <span class="pl-c1">80</span>,</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-jquery-dropzone-js-LC10" class="blob-code blob-code-inner js-file-line">  thumbnailHeight<span class="pl-k">:</span> <span class="pl-c1">80</span>,</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L11" class="blob-num js-line-number" data-line-number="11"></td>
+        <td id="file-jquery-dropzone-js-LC11" class="blob-code blob-code-inner js-file-line">  parallelUploads<span class="pl-k">:</span> <span class="pl-c1">20</span>,</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L12" class="blob-num js-line-number" data-line-number="12"></td>
+        <td id="file-jquery-dropzone-js-LC12" class="blob-code blob-code-inner js-file-line">  previewTemplate<span class="pl-k">:</span> previewTemplate,</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L13" class="blob-num js-line-number" data-line-number="13"></td>
+        <td id="file-jquery-dropzone-js-LC13" class="blob-code blob-code-inner js-file-line">  autoQueue<span class="pl-k">:</span> <span class="pl-c1">false</span>, <span class="pl-c"><span class="pl-c">//</span> Make sure the files aren't queued until manually added</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L14" class="blob-num js-line-number" data-line-number="14"></td>
+        <td id="file-jquery-dropzone-js-LC14" class="blob-code blob-code-inner js-file-line">  previewsContainer<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>#previews<span class="pl-pds">"</span></span>, <span class="pl-c"><span class="pl-c">//</span> Define the container to display the previews</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L15" class="blob-num js-line-number" data-line-number="15"></td>
+        <td id="file-jquery-dropzone-js-LC15" class="blob-code blob-code-inner js-file-line">  clickable<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>.fileinput-button<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> Define the element that should be used as click trigger to select files.</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L16" class="blob-num js-line-number" data-line-number="16"></td>
+        <td id="file-jquery-dropzone-js-LC16" class="blob-code blob-code-inner js-file-line">});</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L17" class="blob-num js-line-number" data-line-number="17"></td>
+        <td id="file-jquery-dropzone-js-LC17" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L18" class="blob-num js-line-number" data-line-number="18"></td>
+        <td id="file-jquery-dropzone-js-LC18" class="blob-code blob-code-inner js-file-line"><span class="pl-smi">myDropzone</span>.<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">"</span>addedfile<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">file</span>) {</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L19" class="blob-num js-line-number" data-line-number="19"></td>
+        <td id="file-jquery-dropzone-js-LC19" class="blob-code blob-code-inner js-file-line">  <span class="pl-c"><span class="pl-c">//</span> Hookup the start button</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L20" class="blob-num js-line-number" data-line-number="20"></td>
+        <td id="file-jquery-dropzone-js-LC20" class="blob-code blob-code-inner js-file-line">  <span class="pl-smi">file</span>.<span class="pl-smi">previewElement</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>.start<span class="pl-pds">"</span></span>).<span class="pl-en">onclick</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() { <span class="pl-smi">myDropzone</span>.<span class="pl-en">enqueueFile</span>(file); };</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L21" class="blob-num js-line-number" data-line-number="21"></td>
+        <td id="file-jquery-dropzone-js-LC21" class="blob-code blob-code-inner js-file-line">});</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L22" class="blob-num js-line-number" data-line-number="22"></td>
+        <td id="file-jquery-dropzone-js-LC22" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L23" class="blob-num js-line-number" data-line-number="23"></td>
+        <td id="file-jquery-dropzone-js-LC23" class="blob-code blob-code-inner js-file-line"><span class="pl-c"><span class="pl-c">//</span> Update the total progress bar</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L24" class="blob-num js-line-number" data-line-number="24"></td>
+        <td id="file-jquery-dropzone-js-LC24" class="blob-code blob-code-inner js-file-line"><span class="pl-smi">myDropzone</span>.<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">"</span>totaluploadprogress<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">progress</span>) {</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L25" class="blob-num js-line-number" data-line-number="25"></td>
+        <td id="file-jquery-dropzone-js-LC25" class="blob-code blob-code-inner js-file-line">  <span class="pl-c1">document</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>#total-progress .progress-bar<span class="pl-pds">"</span></span>).<span class="pl-c1">style</span>.<span class="pl-c1">width</span> <span class="pl-k">=</span> progress <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>%<span class="pl-pds">"</span></span>;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L26" class="blob-num js-line-number" data-line-number="26"></td>
+        <td id="file-jquery-dropzone-js-LC26" class="blob-code blob-code-inner js-file-line">});</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L27" class="blob-num js-line-number" data-line-number="27"></td>
+        <td id="file-jquery-dropzone-js-LC27" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L28" class="blob-num js-line-number" data-line-number="28"></td>
+        <td id="file-jquery-dropzone-js-LC28" class="blob-code blob-code-inner js-file-line"><span class="pl-smi">myDropzone</span>.<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">"</span>sending<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">file</span>) {</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L29" class="blob-num js-line-number" data-line-number="29"></td>
+        <td id="file-jquery-dropzone-js-LC29" class="blob-code blob-code-inner js-file-line">  <span class="pl-c"><span class="pl-c">//</span> Show the total progress bar when upload starts</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L30" class="blob-num js-line-number" data-line-number="30"></td>
+        <td id="file-jquery-dropzone-js-LC30" class="blob-code blob-code-inner js-file-line">  <span class="pl-c1">document</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>#total-progress<span class="pl-pds">"</span></span>).<span class="pl-c1">style</span>.<span class="pl-smi">opacity</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L31" class="blob-num js-line-number" data-line-number="31"></td>
+        <td id="file-jquery-dropzone-js-LC31" class="blob-code blob-code-inner js-file-line">  <span class="pl-c"><span class="pl-c">//</span> And disable the start button</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L32" class="blob-num js-line-number" data-line-number="32"></td>
+        <td id="file-jquery-dropzone-js-LC32" class="blob-code blob-code-inner js-file-line">  <span class="pl-smi">file</span>.<span class="pl-smi">previewElement</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>.start<span class="pl-pds">"</span></span>).<span class="pl-c1">setAttribute</span>(<span class="pl-s"><span class="pl-pds">"</span>disabled<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>disabled<span class="pl-pds">"</span></span>);</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L33" class="blob-num js-line-number" data-line-number="33"></td>
+        <td id="file-jquery-dropzone-js-LC33" class="blob-code blob-code-inner js-file-line">});</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L34" class="blob-num js-line-number" data-line-number="34"></td>
+        <td id="file-jquery-dropzone-js-LC34" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L35" class="blob-num js-line-number" data-line-number="35"></td>
+        <td id="file-jquery-dropzone-js-LC35" class="blob-code blob-code-inner js-file-line"><span class="pl-c"><span class="pl-c">//</span> Hide the total progress bar when nothing's uploading anymore</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L36" class="blob-num js-line-number" data-line-number="36"></td>
+        <td id="file-jquery-dropzone-js-LC36" class="blob-code blob-code-inner js-file-line"><span class="pl-smi">myDropzone</span>.<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">"</span>queuecomplete<span class="pl-pds">"</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">progress</span>) {</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L37" class="blob-num js-line-number" data-line-number="37"></td>
+        <td id="file-jquery-dropzone-js-LC37" class="blob-code blob-code-inner js-file-line">  <span class="pl-c1">document</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>#total-progress<span class="pl-pds">"</span></span>).<span class="pl-c1">style</span>.<span class="pl-smi">opacity</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>;</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L38" class="blob-num js-line-number" data-line-number="38"></td>
+        <td id="file-jquery-dropzone-js-LC38" class="blob-code blob-code-inner js-file-line">});</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L39" class="blob-num js-line-number" data-line-number="39"></td>
+        <td id="file-jquery-dropzone-js-LC39" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L40" class="blob-num js-line-number" data-line-number="40"></td>
+        <td id="file-jquery-dropzone-js-LC40" class="blob-code blob-code-inner js-file-line"><span class="pl-c"><span class="pl-c">//</span> Setup the buttons for all transfers</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L41" class="blob-num js-line-number" data-line-number="41"></td>
+        <td id="file-jquery-dropzone-js-LC41" class="blob-code blob-code-inner js-file-line"><span class="pl-c"><span class="pl-c">//</span> The "add files" button doesn't need to be setup because the config</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L42" class="blob-num js-line-number" data-line-number="42"></td>
+        <td id="file-jquery-dropzone-js-LC42" class="blob-code blob-code-inner js-file-line"><span class="pl-c"><span class="pl-c">//</span> `clickable` has already been specified.</span></td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L43" class="blob-num js-line-number" data-line-number="43"></td>
+        <td id="file-jquery-dropzone-js-LC43" class="blob-code blob-code-inner js-file-line"><span class="pl-c1">document</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>#actions .start<span class="pl-pds">"</span></span>).<span class="pl-en">onclick</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L44" class="blob-num js-line-number" data-line-number="44"></td>
+        <td id="file-jquery-dropzone-js-LC44" class="blob-code blob-code-inner js-file-line">  <span class="pl-smi">myDropzone</span>.<span class="pl-en">enqueueFiles</span>(<span class="pl-smi">myDropzone</span>.<span class="pl-en">getFilesWithStatus</span>(<span class="pl-smi">Dropzone</span>.<span class="pl-c1">ADDED</span>));</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L45" class="blob-num js-line-number" data-line-number="45"></td>
+        <td id="file-jquery-dropzone-js-LC45" class="blob-code blob-code-inner js-file-line">};</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L46" class="blob-num js-line-number" data-line-number="46"></td>
+        <td id="file-jquery-dropzone-js-LC46" class="blob-code blob-code-inner js-file-line"><span class="pl-c1">document</span>.<span class="pl-c1">querySelector</span>(<span class="pl-s"><span class="pl-pds">"</span>#actions .cancel<span class="pl-pds">"</span></span>).<span class="pl-en">onclick</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L47" class="blob-num js-line-number" data-line-number="47"></td>
+        <td id="file-jquery-dropzone-js-LC47" class="blob-code blob-code-inner js-file-line">  <span class="pl-smi">myDropzone</span>.<span class="pl-en">removeAllFiles</span>(<span class="pl-c1">true</span>);</td>
+      </tr>
+      <tr>
+        <td id="file-jquery-dropzone-js-L48" class="blob-num js-line-number" data-line-number="48"></td>
+        <td id="file-jquery-dropzone-js-LC48" class="blob-code blob-code-inner js-file-line">};</td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/enyo/0def0ce04d744fffcee4/raw/231121ad4ae35ae41c35ffb46e2d3b8eea5f898c/jquery-dropzone.js" style="float:right">view raw</a>
+        <a href="https://gist.github.com/enyo/0def0ce04d744fffcee4#file-jquery-dropzone-js">jquery-dropzone.js</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+
+
+  </div>
+
+
+
+<input type="file" multiple="multiple" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;"></body></html>
