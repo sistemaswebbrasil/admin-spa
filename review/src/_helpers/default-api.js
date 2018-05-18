@@ -5,7 +5,7 @@ export function defaultApi() {
     // return authorization header with jwt token
     let user = JSON.parse(localStorage.getItem('user'));
 
-    axios.defaults.baseURL = 'http://api.app.com';
+    axios.defaults.baseURL = 'http://192.168.5.21';
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     if (user && user.token) {
         return axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;

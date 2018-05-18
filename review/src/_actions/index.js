@@ -4,3 +4,5 @@
 // você pode aprender sobre elas em https://redux.js.org/basics/actions .
 export * from './alert.actions';
 export * from './user.actions';
+export * from './mesaActions';
+export * from './pedidoActions';

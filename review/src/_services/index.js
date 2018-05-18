@@ -3,3 +3,5 @@
 // operações CRUD).Os serviços também podem ter métodos que não envolvem chamadas http, por exemplo, o userService.logout()método
 // simplesmente remove um item do armazenamento local.
 export * from './user.service';
+export * from './mesaService';
+export * from './pedidoService';

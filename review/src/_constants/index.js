@@ -5,3 +5,5 @@
 // para simplificar meus arquivos de ação redux e mantê - los focados em uma coisa.
 export * from './alert.constants';
 export * from './user.constants';
+export * from './mesaConstants';
+export * from './pedidoConstants';

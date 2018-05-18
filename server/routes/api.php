@@ -24,8 +24,11 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('logout', 'API\AuthAPIController@logout');
     Route::resource('users', 'API\UserAPIController');
 });
-Route::resource('contacts', 'API\ContactAPIController');
 
 Route::resource('contacts', 'API\ContactAPIController');
 // Route::get('contacts/by-email/{email}', 'API\ContactAPIController@showByEmail');
 Route::get('contacts/by-email/{email}', 'API\ContactAPIController@showByEmail')->name('contacts.showByEmail');
+
+Route::resource('mesas', 'API\MesaAPIController');
+Route::resource('pedidos', 'API\PedidoAPIController');
+Route::get('pedidos/{mesa}/mesa', 'API\PedidoAPIController@showByMesa')->name('pedidos.showByMesa');

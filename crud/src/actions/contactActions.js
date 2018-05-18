@@ -108,7 +108,7 @@ export function createContact(contact) {
           return Promise.reject(error);
         }
       );
-  };
+  };function failure(error) { return { type: contactConstants.GETALL_FAILURE, error }; }
   function request(contact) { return { type: contactConstants.CREATE_REQUEST, contact }; }
   function success(contact) { return { type: contactConstants.CREATE_SUCCESS, payload:contact }; }
   function failure(error) { return { type: contactConstants.CREATE_FAILURE, error }; }

@@ -1,6 +1,6 @@
 // Componente da aplicação inicial ,ele contém o html externo, as rotas e a notificação de alerta global
 import React from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { history } from '../_helpers';
@@ -11,6 +11,8 @@ import { NotFound } from '../App';
 import { LoginPage } from '../LoginPage';
 import { UserPage } from '../UserPage';
 import { RegisterPage } from '../RegisterPage';
+import { MesaPage,MesaDetalhe } from '../Mesa';
+import './sticky-footer-navbar.css';
 
 //import UserPage from '../UserPage';
 
@@ -27,29 +29,68 @@ class App extends React.Component {
     render() {
         const { alert } = this.props;
         return (
-            <div className="jumbotron">
-                <div className="container">
-                    <div className="col-sm-8 col-sm-offset-2">
+            <div>
+
+
+                <div className="">
+
+                    <p> a</p>
+                    <p> s</p>
+                    <p></p>
+                    <div className="container">
                         {alert.message &&
-                        <div className={`alert ${alert.type}`}>
-                            {alert.message}
-                        </div>
+                            <div className={`alert ${alert.type}`}>
+                                {alert.message}
+                            </div>
                         }
-                        <h2>Container?</h2>
-                        <Router history={history}>
-                            <div>
+                    </div>
+                    <Router history={history}>
+                        <div>
+                            <nav className="navbar navbar-default navbar-fixed-top">
+                                <div className="container">
+                                    <div className="navbar-header">
+                                        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                            <span className="sr-only">Toggle navigation</span>
+                                            <span className="icon-bar"></span>
+                                            <span className="icon-bar"></span>
+                                            <span className="icon-bar"></span>
+                                        </button>
+                                        <NavLink to="/" activeClassName="navbar-brand">Review</NavLink>
+                                    </div>
+                                    <div id="navbar" className="collapse navbar-collapse">
+                                        <ul className="nav navbar-nav">
+                                            <li className={location.pathname === '/' ? 'active' : ''} >
+                                                <NavLink to="/" activeClassName="active">Home</NavLink>
+                                            </li>
+                                            <li className={location.pathname === '/mesas' ? 'active' : ''} >
+                                                <NavLink to="/mesas" activeClassName="active">Mesas</NavLink>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>
+
+                            <div className="container">
                                 <Switch>
                                     <PrivateRoute path="/" exact component={HomePage} />
                                     <Route path="/login" exact component={LoginPage} />
                                     <PrivateRoute path="/users" exact component={UserPage} />
                                     <Route path="/register" exact component={RegisterPage} />
+                                    <Route path="/mesas" exact component={MesaPage} />
+                                    <Route path="/mesa/edit/:id" component={MesaDetalhe} />
                                     { /* Finally, catch all unmatched routes */}
                                     <Route component={NotFound} />
                                 </Switch>
                             </div>
-                        </Router>
-                    </div>
+                        </div>
+                    </Router>
+
                 </div>
+                <footer className="footer">
+                    <div className="container">
+                        <p className="text-muted">Place sticky footer content here.</p>
+                    </div>
+                </footer>
             </div>
         );
     }
@@ -72,4 +113,4 @@ function mapStateToProps(state) {
 const connectedApp = connect(mapStateToProps)(App);
 
 // Retorna a aplicação atual
-export  { connectedApp as App };
+export { connectedApp as App };
